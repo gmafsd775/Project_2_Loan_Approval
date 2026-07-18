@@ -84,7 +84,7 @@ Project_2_Loan_Approval/
 Clone the repository
 
 ```bash
-git clone <repository-link>
+git clone https://github.com/gmafsd775/Project_2_Loan_Approval
 ```
 
 Install required packages
