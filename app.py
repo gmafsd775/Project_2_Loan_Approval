@@ -1,5 +1,14 @@
 import streamlit as st
-import joblib
+import importlib
+
+try:
+    joblib = importlib.import_module("joblib")
+except ImportError:
+    try:
+        joblib = importlib.import_module("sklearn.externals.joblib")
+    except ImportError:
+        st.error("joblib is not installed. Install it using: pip install joblib")
+        st.stop()
 
 st.set_page_config(
     page_title="Loan Approval Predictor",
@@ -46,6 +55,18 @@ st.markdown("""
 - Responsive and User-Friendly Design
 """)
 
+st.info("""
+ℹ️ **Important Note**
+
+This prediction system is trained on a public loan approval dataset that primarily represents
+low-to-middle income applicants requesting relatively small loan amounts.
+
+For the most reliable predictions, please enter realistic monthly income and loan values
+similar to those commonly requested by individual applicants.
+
+This application is intended for educational and demonstration purposes.
+""")
+
 model = joblib.load("Loan_Approval_Model.pkl")
 scaler = joblib.load("Loan_Approval_Scaler.pkl")
 
@@ -81,8 +102,10 @@ st.subheader("Financial Information")
 
 applicant_income = st.number_input(
     "Applicant Monthly Income (PKR)",
-    min_value=0,
-    help="Example: 50000"
+    min_value=150,
+    max_value=81000,
+    value=5000,
+    help="Enter the monthly income of the applicant in Pakistani Rupees (PKR), for example, enter between minimum 5000 PKR and maximum 81000 for 81,000 PKR."
 )
 
 coapplicant_income = st.number_input(
@@ -92,9 +115,11 @@ coapplicant_income = st.number_input(
 )
 
 loan_amount = st.number_input(
-    "Requested Loan Amount (Thousands)",
-    min_value=0,
-    help="Example: 150"
+    "Requested Loan Amount (Thousands of PKR)",
+    min_value=9,
+    max_value=700,
+    value=150,
+    help="Enter the loan amount in thousands of Pakistani Rupees (PKR). For example, enter between 9 and 700 for 9,000 to 700,000 PKR."
 )
 
 loan_term = st.number_input(
